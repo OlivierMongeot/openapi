@@ -27,7 +27,7 @@ $("#table_cmd").sortable({
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
   if (!isset(_cmd)) {
-    var _cmd = {configuration: {}}
+    var _cmd = { configuration: {} }
   }
   if (!isset(_cmd.configuration)) {
     _cmd.configuration = {}
@@ -61,7 +61,7 @@ function addCmdToTable(_cmd) {
   tr += '</div>'
   tr += '</td>'
   tr += '<td>';
-  tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>'; 
+  tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
   tr += '</td>';
   tr += '<td>'
   if (is_numeric(_cmd.id)) {
@@ -73,10 +73,10 @@ function addCmdToTable(_cmd) {
   $('#table_cmd tbody').append(tr)
   var tr = $('#table_cmd tbody tr').last()
   jeedom.eqLogic.buildSelectCmd({
-    id:  $('.eqLogicAttr[data-l1key=id]').value(),
-    filter: {type: 'info'},
+    id: $('.eqLogicAttr[data-l1key=id]').value(),
+    filter: { type: 'info' },
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'})
+      $('#div_alert').showAlert({ message: error.message, level: 'danger' })
     },
     success: function (result) {
       tr.find('.cmdAttr[data-l1key=value]').append(result)
@@ -85,3 +85,78 @@ function addCmdToTable(_cmd) {
     }
   })
 }
+
+const buildData = (dataApi) => {
+
+
+  let html = "<table><tr><th>Company</th><th>Contact</th><th>Country</th></tr>"
+
+  html += " < tr ><td>Alfreds Futterkiste</td><td>Maria Anders</td><td>Germany</td></tr >"
+  html += "<tr><td>Centro comercial Moctezuma</td><td>Francisco Chang</td> <td>Mexico</td></tr>"
+  html += "</table >"
+
+  return html
+
+}
+
+
+
+var fetchApiJS = (url, token) => {
+  $.ajax({
+    type: "POST",
+    url: "plugins/openapi/core/ajax/openapi.ajax.php",
+    data: {
+      action: "fetchApi",
+      url: url,
+      token: token
+    },
+    dataType: 'json',
+    beforeSend: () => {
+    },
+    error: (request, status, error) => {
+      handleAjaxError(request, status, error);
+    },
+    success: (data) => {
+      if (data.state != 'ok') {
+        console.log('Erreur AJAX : ' + data);
+      } else {
+        console.log("Ajax succes : JSON state = ")
+        console.log(data.result)
+
+
+        let table = buildData()
+        // let html = '<div class="form-group searchMode city_mode"><label class="col-sm-3 control-label">{{Longitude}}</label><div class="col-sm-4">'
+        // html += '<input type="number" value="' + data.result[0] + '" disabled="disabled" id="city-longitude" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="city_longitude" />'
+        // html += '</div>'
+        // if (data.result[1] != 0) {
+        //   html += '<i class="fas fa-check"></i>'
+        // } else {
+        //   html += '<i class="fas fa-times"></i>'
+        // }
+        // html += '</div><div class="form-group searchMode city_mode">	<label class="col-sm-3 control-label">{{Latitude}}</label><div class="col-sm-4">'
+        // html += '<input type="number" value="' + data.result[1] + '" id="city-latitude" disabled="disabled" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="city_latitude" />'
+        // html += '</div>'
+        // if (data.result[0] != 0) {
+        //   html += '<i class="fas fa-check"></i>'
+        // } else {
+        //   html += '<i class="fas fa-times"></i>'
+        // }
+        // html += '</div>'
+        // setTimeout(() => {
+        //   $('#geoloc-city-mode').hide().html(html).fadeIn('slow')
+        // }, 200);
+
+      }
+    }
+  });
+}
+
+
+$('#fetch-api').on('click', () => {
+
+  let url = $('.eqLogicAttr[data-l1key=configuration][data-l2key=url]').value()
+  let token = $('.eqLogicAttr[data-l1key=configuration][data-l2key=token]').value()
+  if (url.length >= 2 && token.length >= 2) {
+    fetchApiJS(url, token)
+  }
+});

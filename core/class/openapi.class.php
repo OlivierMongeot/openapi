@@ -1,24 +1,25 @@
 <?php
 /* This file is part of Jeedom.
-*
-* Jeedom is free software: you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* Jeedom is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
-*/
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 /* * ***************************Includes********************************* */
-require_once __DIR__  . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
-class openapi extends eqLogic {
+class openapi extends eqLogic
+{
   /*     * *************************Attributs****************************** */
 
   /*
@@ -73,75 +74,123 @@ class openapi extends eqLogic {
   /*     * *********************Méthodes d'instance************************* */
 
   // Fonction exécutée automatiquement avant la création de l'équipement
-  public function preInsert() {
+  public function preInsert()
+  {
   }
 
   // Fonction exécutée automatiquement après la création de l'équipement
-  public function postInsert() {
+  public function postInsert()
+  {
   }
 
   // Fonction exécutée automatiquement avant la mise à jour de l'équipement
-  public function preUpdate() {
+  public function preUpdate()
+  {
   }
 
   // Fonction exécutée automatiquement après la mise à jour de l'équipement
-  public function postUpdate() {
+  public function postUpdate()
+  {
   }
 
   // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
-  public function preSave() {
+  public function preSave()
+  {
   }
 
   // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
-  public function postSave() {
+  public function postSave()
+  {
   }
 
   // Fonction exécutée automatiquement avant la suppression de l'équipement
-  public function preRemove() {
+  public function preRemove()
+  {
   }
 
   // Fonction exécutée automatiquement après la suppression de l'équipement
-  public function postRemove() {
+  public function postRemove()
+  {
   }
 
-  /*
-  * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
-  * Exemple avec le champ "Mot de passe" (password)
-  public function decrypt() {
-    $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
-  }
-  public function encrypt() {
-    $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
-  }
-  */
+  public static function fetchAPIPHP(string $url, string $token, bool $bearer = true)
+  {
+    log::add('openapi', 'debug', 'url = ' . json_encode($url));
+    log::add('openapi', 'debug', 'token = ' . json_encode($token));
+    $authorization = 'Authorization: Bearer ' . $token;
+    log::add('openapi', 'debug', json_encode($authorization));
 
-  /*
-  * Permet de modifier l'affichage du widget (également utilisable par les commandes)
-  public function toHtml($_version = 'dashboard') {}
-  */
 
-  /*
-  * Permet de déclencher une action avant modification d'une variable de configuration du plugin
-  * Exemple avec la variable "param3"
-  public static function preConfig_param3( $value ) {
-    // do some checks or modify on $value
-    return $value;
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+      CURLOPT_PORT => "8123",
+      CURLOPT_URL => $url,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => "",
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 30,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => "GET",
+      CURLOPT_POSTFIELDS => "",
+      CURLOPT_HTTPHEADER => [$authorization],
+    ]);
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+
+    curl_close($curl);
+
+    if ($err) {
+      log::add('openapi', 'debug', 'Error : ' . json_encode($err));
+
+    } else {
+      $result = json_decode(($response));
+      log::add('openapi', 'debug', 'Response : ' . json_encode($result));
+      return $result;
+
+    }
   }
-  */
 
-  /*
-  * Permet de déclencher une action après modification d'une variable de configuration du plugin
-  * Exemple avec la variable "param3"
-  public static function postConfig_param3($value) {
-    // no return value
-  }
-  */
+/*
+* Permet de crypter/décrypter automatiquement des champs de configuration des équipements
+* Exemple avec le champ "Mot de passe" (password)
+public function decrypt() {
+$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+}
+public function encrypt() {
+$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
+}
+*/
 
-  /*     * **********************Getteur Setteur*************************** */
+/*
+* Permet de modifier l'affichage du widget (également utilisable par les commandes)
+public function toHtml($_version = 'dashboard') {}
+*/
+
+/*
+* Permet de déclencher une action avant modification d'une variable de configuration du plugin
+* Exemple avec la variable "param3"
+public static function preConfig_param3( $value ) {
+// do some checks or modify on $value
+return $value;
+}
+*/
+
+/*
+* Permet de déclencher une action après modification d'une variable de configuration du plugin
+* Exemple avec la variable "param3"
+public static function postConfig_param3($value) {
+// no return value
+}
+*/
+
+/*     * **********************Getteur Setteur*************************** */
 
 }
 
-class openapiCmd extends cmd {
+class openapiCmd extends cmd
+{
   /*     * *************************Attributs****************************** */
 
   /*
@@ -156,14 +205,15 @@ class openapiCmd extends cmd {
   /*
   * Permet d'empêcher la suppression des commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
   public function dontRemoveCmd() {
-    return true;
+  return true;
   }
   */
 
   // Exécution d'une commande
-  public function execute($_options = array()) {
+  public function execute($_options = array())
+  {
   }
 
-  /*     * **********************Getteur Setteur*************************** */
+/*     * **********************Getteur Setteur*************************** */
 
 }
