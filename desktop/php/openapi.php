@@ -199,19 +199,38 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						<!-- Partie droite de l'onglet "Équipement" -->
 						<!-- Affiche un champ de commentaire par défaut mais vous pouvez y mettre ce que vous voulez -->
 						<div class="col-lg-6">
-							<legend><i class="fas fa-info"></i> {{Informations}}</legend>
+							<!-- <legend><i class="fas fa-info"></i> {{Informations}}</legend>
 							<div class="form-group">
 								<label class="col-sm-4 control-label">{{Description}}</label>
 								<div class="col-sm-6">
 									<textarea class="form-control eqLogicAttr autogrow" data-l1key="comment"></textarea>
 								</div>
-							</div>
+							</div> -->
 
 							<legend><i class="fas fa-info"></i> {{Tableau des data}}</legend>
 							<div class="form-group">
 
-								<div class="col-sm-6">
+								<div>
 									<div id="array-data">
+										<!-- <div id="table-build">
+										<table class="table-responsive" style="width:100%">
+											<tr>
+												<th>Entity ID</th>
+												<th>States</th>
+												<th>Attributes</th>
+												<th>Equipement</th>
+												<th>Associé</th>
+											</tr>
+											<tr>
+												<td>Alfreds Futterkiste</td>
+												<td>Maria Anders</td>
+												<td>Germany</td>
+												<td>SONDE CUISINE</td>
+												<td>Yes</td>
+											</tr>
+										</table>
+									</div> -->
+
 									</div>
 								</div>
 

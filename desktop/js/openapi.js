@@ -86,17 +86,31 @@ function addCmdToTable(_cmd) {
   })
 }
 
-const buildData = (dataApi) => {
+var buildData = (dataApi) => {
+
+  let html = '<div id="table-build" ><table class="table-responsive" style="width:100%"><tr>'
+  html += "<th>Entity ID</th><th>States</th><th>Attributes</th>"
+  html += "<th>Equipement</th><th> Associé</th></tr><tr>"
+  console.log(dataApi);
+
+  for (const property in dataApi) {
+    //   console.log(property);
+    // Entity ID
+    // html += "<td>" + property.entity_id + "</td>"
+    // State
 
 
-  let html = "<table><tr><th>Company</th><th>Contact</th><th>Country</th></tr>"
+    html += "<tr><td>dvdvdvdfvdfvdID </td>"
+    html += "<td>Maria Anders</td>"
+    html += "<td>Germany</td>"
+    html += "<td> SONDE CUISINE</td>"
+    html += "<td>Yes</td></tr>"
 
-  html += " < tr ><td>Alfreds Futterkiste</td><td>Maria Anders</td><td>Germany</td></tr >"
-  html += "<tr><td>Centro comercial Moctezuma</td><td>Francisco Chang</td> <td>Mexico</td></tr>"
-  html += "</table >"
 
+  }
+
+  html += "</table></div>"
   return html
-
 }
 
 
@@ -124,7 +138,7 @@ var fetchApiJS = (url, token) => {
         console.log(data.result)
 
 
-        let table = buildData()
+        let table = buildData(data.result)
         // let html = '<div class="form-group searchMode city_mode"><label class="col-sm-3 control-label">{{Longitude}}</label><div class="col-sm-4">'
         // html += '<input type="number" value="' + data.result[0] + '" disabled="disabled" id="city-longitude" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="city_longitude" />'
         // html += '</div>'
@@ -143,7 +157,7 @@ var fetchApiJS = (url, token) => {
         // }
         // html += '</div>'
         // setTimeout(() => {
-        //   $('#geoloc-city-mode').hide().html(html).fadeIn('slow')
+        $('#array-data').hide().html(table).fadeIn('slow')
         // }, 200);
 
       }
